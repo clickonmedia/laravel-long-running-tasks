@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Spatie\Monitor\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class MonitorCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'laravel-long-running-tasks-monitor';
 
     public $description = 'My command';
 
