@@ -6,9 +6,7 @@ use Illuminate\Console\Command;
 
 class MonitorCommand extends Command
 {
-    public $signature = 'laravel-long-running-tasks-monitor';
-
-    public $description = 'My command';
+    public $signature = 'long-running-tasks:monitor';
 
     public function handle(): int
     {

@@ -69,7 +69,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Spatie\\Monitor\\MonitorServiceProvider"
+              "LongRunningTasksServiceProvider"
             ],
             "aliases": {
                 "Monitor": "Spatie\\Monitor\\Facades\\Monitor"
