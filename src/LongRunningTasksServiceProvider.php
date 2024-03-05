@@ -4,7 +4,6 @@ namespace Spatie\Monitor;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Spatie\Monitor\Commands\MonitorCommand;
 use Spatie\Monitor\Facades\Monitor;
 
 class LongRunningTasksServiceProvider extends PackageServiceProvider

@@ -2,7 +2,6 @@
 
 namespace Spatie\Monitor\Jobs;
 
-
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Spatie\Monitor\Enums\LogItemCheckResult;
@@ -21,7 +20,7 @@ class RunLongRunningTaskJob implements ShouldQueue
 
         try {
             $checkResult = $task->check($this->longRunningTaskLogItem);
-        } catch(Exception $exception) {
+        } catch (Exception $exception) {
             // TODO: handle failure
         }
 
