@@ -2,9 +2,9 @@
 
 namespace Clickonmedia\Monitor;
 
+use Clickonmedia\Monitor\Facades\Monitor;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Clickonmedia\Monitor\Facades\Monitor;
 
 class LongRunningTasksServiceProvider extends PackageServiceProvider
 {

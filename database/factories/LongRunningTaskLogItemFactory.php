@@ -2,9 +2,9 @@
 
 namespace Clickonmedia\Monitor\Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LongRunningTaskLogItemFactory extends Factory
 {

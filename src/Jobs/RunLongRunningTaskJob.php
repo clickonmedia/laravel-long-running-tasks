@@ -2,10 +2,10 @@
 
 namespace Clickonmedia\Monitor\Jobs;
 
-use Exception;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Clickonmedia\Monitor\Enums\LogItemCheckResult;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
+use Exception;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class RunLongRunningTaskJob implements ShouldQueue
 {

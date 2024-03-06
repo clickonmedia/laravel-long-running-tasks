@@ -2,9 +2,9 @@
 
 namespace Clickonmedia\Monitor\Tests;
 
+use Clickonmedia\Monitor\LongRunningTasksServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Clickonmedia\Monitor\LongRunningTasksServiceProvider;
 
 class TestCase extends Orchestra
 {
