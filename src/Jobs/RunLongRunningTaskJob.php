@@ -9,7 +9,7 @@ use Exception;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class RunLongRunningTaskJob implements ShouldQueue, ShouldBeUnique
+class RunLongRunningTaskJob implements ShouldBeUnique, ShouldQueue
 {
     public function __construct(protected LongRunningTaskLogItem $longRunningTaskLogItem)
     {
