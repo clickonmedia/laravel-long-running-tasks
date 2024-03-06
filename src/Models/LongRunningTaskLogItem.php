@@ -64,4 +64,9 @@ class LongRunningTaskLogItem extends Model
 
         return $this;
     }
+
+    public function shouldKeepChecking(): bool
+    {
+        return $this->stop_checking_at > now();
+    }
 }

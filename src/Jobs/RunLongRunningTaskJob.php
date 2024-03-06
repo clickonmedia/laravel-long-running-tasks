@@ -42,6 +42,17 @@ class RunLongRunningTaskJob implements ShouldQueue
             return;
         }
 
+        if (! $this->longRunningTaskLogItem->shouldKeepChecking()) {
+            $this->longRunningTaskLogItem->markAsCheckedEnded(LogItemStatus::DidNotComplete);
+
+            return;
+        }
+
+        $this->dispatchAgain();
+    }
+
+    protected function dispatchAgain(): void
+    {
         $this->longRunningTaskLogItem->markAsPending();
 
         $job = new self($this->longRunningTaskLogItem);
