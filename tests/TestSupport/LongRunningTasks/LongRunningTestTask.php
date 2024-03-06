@@ -19,7 +19,7 @@ class LongRunningTestTask extends LongRunningTask
     {
         if ($this->callable) {
             return ($this->callable)($logItem);
-    }
+        }
 
         return LogItemCheckResult::StopChecking;
     }
