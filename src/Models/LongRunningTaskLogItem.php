@@ -18,6 +18,7 @@ class LongRunningTaskLogItem extends Model
         'last_check_ended_at' => 'timestamp',
         'stop_checking_at' => 'timestamp',
         'exception' => 'array',
+        'run_count' => 'integer',
     ];
 
     public function task(): LongRunningTask
@@ -50,6 +51,7 @@ class LongRunningTaskLogItem extends Model
         $this->update([
             'last_check_started_at' => now(),
             'status' => LogItemStatus::Running,
+            'run_count' => $this->run_count + 1,
         ]);
 
         return $this;
