@@ -1,16 +1,16 @@
 <?php
 
-namespace Spatie\Monitor\Facades;
+namespace Clickonmedia\Monitor\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \Spatie\Monitor\Monitor
+ * @see \Clickonmedia\Monitor\Monitor
  */
 class Monitor extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \Spatie\Monitor\Monitor::class;
+        return \Clickonmedia\Monitor\Monitor::class;
     }
 }

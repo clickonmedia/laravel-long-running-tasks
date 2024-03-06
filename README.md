@@ -1,26 +1,18 @@
 # Monitor long running tasks in a Laravel app
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/spatie/laravel-long-running-tasks-monitor.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-long-running-tasks-monitor)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/spatie/laravel-long-running-tasks-monitor/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/spatie/laravel-long-running-tasks-monitor/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/spatie/laravel-long-running-tasks-monitor/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/spatie/laravel-long-running-tasks-monitor/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-long-running-tasks-monitor.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-long-running-tasks-monitor)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/clickonmedia/laravel-long-running-tasks-monitor.svg?style=flat-square)](https://packagist.org/packages/clickonmedia/laravel-long-running-tasks-monitor)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/clickonmedia/laravel-long-running-tasks-monitor/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/clickonmedia/laravel-long-running-tasks-monitor/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/clickonmedia/laravel-long-running-tasks-monitor/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/clickonmedia/laravel-long-running-tasks-monitor/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/clickonmedia/laravel-long-running-tasks-monitor.svg?style=flat-square)](https://packagist.org/packages/clickonmedia/laravel-long-running-tasks-monitor)
 
 This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/laravel-long-running-tasks-monitor.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/laravel-long-running-tasks-monitor)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require spatie/laravel-long-running-tasks-monitor
+composer require clickonmedia/laravel-long-running-tasks-monitor
 ```
 
 You can publish and run the migrations with:
@@ -52,8 +44,8 @@ php artisan vendor:publish --tag="laravel-long-running-tasks-monitor-views"
 ## Usage
 
 ```php
-$monitor = new Spatie\Monitor();
-echo $monitor->echoPhrase('Hello, Spatie!');
+$monitor = new Clickonmedia\Monitor();
+echo $monitor->echoPhrase('Hello, Clickonmedia!');
 ```
 
 ## Testing

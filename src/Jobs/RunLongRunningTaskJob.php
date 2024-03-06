@@ -1,11 +1,11 @@
 <?php
 
-namespace Spatie\Monitor\Jobs;
+namespace Clickonmedia\Monitor\Jobs;
 
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Spatie\Monitor\Enums\LogItemCheckResult;
-use Spatie\Monitor\Models\LongRunningTaskLogItem;
+use Clickonmedia\Monitor\Enums\LogItemCheckResult;
+use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 
 class RunLongRunningTaskJob implements ShouldQueue
 {

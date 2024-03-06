@@ -1,8 +1,7 @@
 {
-    "name": "spatie/laravel-long-running-tasks-monitor",
+    "name": "clickonmedia/laravel-long-running-tasks-monitor",
     "description": "Monitor long running tasks in a Laravel app",
     "keywords": [
-        "Spatie",
         "laravel",
         "laravel-long-running-tasks-monitor"
     ],
@@ -31,13 +30,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Spatie\\Monitor\\": "src/",
-            "Spatie\\Monitor\\Database\\Factories\\": "database/factories/"
+            "Clickonmedia\\Monitor\\": "src/",
+            "Clickonmedia\\Monitor\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spatie\\Monitor\\Tests\\": "tests/",
+            "Clickonmedia\\Monitor\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -72,7 +71,7 @@
               "LongRunningTasksServiceProvider"
             ],
             "aliases": {
-                "Monitor": "Spatie\\Monitor\\Facades\\Monitor"
+                "Monitor": "Clickonmedia\\Monitor\\Facades\\Monitor"
             }
         }
     },

@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Monitor;
+namespace Clickonmedia\Monitor;
 
-use Spatie\Monitor\Enums\LogItemStatus;
-use Spatie\Monitor\Jobs\RunLongRunningTaskJob;
-use Spatie\Monitor\Models\LongRunningTaskLogItem;
+use Clickonmedia\Monitor\Enums\LogItemStatus;
+use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
+use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 
 abstract class LongRunningTask
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Monitor\Commands;
+namespace Clickonmedia\Monitor\Commands;
 
 use Illuminate\Console\Command;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Monitor\Models;
+namespace Clickonmedia\Monitor\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Monitor\Enums\LogItemStatus;
-use Spatie\Monitor\LongRunningTask;
+use Clickonmedia\Monitor\Enums\LogItemStatus;
+use Clickonmedia\Monitor\LongRunningTask;
 
 class LongRunningTaskLogItem extends Model
 {

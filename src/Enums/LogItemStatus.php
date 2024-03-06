@@ -1,6 +1,6 @@
 <?php
 
-namespace Spatie\Monitor\Enums;
+namespace Clickonmedia\Monitor\Enums;
 
 enum LogItemStatus: string
 {

@@ -1,5 +1,5 @@
 <?php
 
-use Spatie\Monitor\Tests\TestCase;
+use Clickonmedia\Monitor\Tests\TestCase;
 
 uses(TestCase::class)->in(__DIR__);

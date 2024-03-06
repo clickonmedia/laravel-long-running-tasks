@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Monitor;
+namespace Clickonmedia\Monitor;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Spatie\Monitor\Facades\Monitor;
+use Clickonmedia\Monitor\Facades\Monitor;
 
 class LongRunningTasksServiceProvider extends PackageServiceProvider
 {
@@ -16,9 +16,11 @@ class LongRunningTasksServiceProvider extends PackageServiceProvider
             ->hasMigration('create_long_running_tasks_table')
             ->hasCommand(Monitor::class);
 
+        /*
         LongRunningSomeServiceTask::make()
             ->meta()
             ->start();
+        */
 
     }
 }

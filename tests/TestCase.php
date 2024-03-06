@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Monitor\Tests;
+namespace Clickonmedia\Monitor\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Spatie\Monitor\LongRunningTasksServiceProvider;
+use Clickonmedia\Monitor\LongRunningTasksServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Spatie\\Monitor\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Clickonmedia\\Monitor\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 

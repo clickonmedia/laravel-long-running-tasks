@@ -1,10 +1,10 @@
 <?php
 
-namespace Spatie\Monitor\Database\Factories;
+namespace Clickonmedia\Monitor\Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Spatie\Monitor\Enums\LogItemStatus;
-use Spatie\Monitor\Models\LongRunningTaskLogItem;
+use Clickonmedia\Monitor\Enums\LogItemStatus;
+use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 
 class LongRunningTaskLogItemFactory extends Factory
 {

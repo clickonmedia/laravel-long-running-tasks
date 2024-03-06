@@ -1,6 +1,6 @@
 <?php
 
-// config for Spatie/Monitor
+// config for Clickonmedia/Monitor
 return [
 
 ];
