@@ -6,9 +6,10 @@ use Clickonmedia\Monitor\Enums\LogItemCheckResult;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 use Exception;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class RunLongRunningTaskJob implements ShouldQueue
+class RunLongRunningTaskJob implements ShouldQueue, ShouldBeUnique
 {
     public function __construct(protected LongRunningTaskLogItem $longRunningTaskLogItem)
     {
@@ -60,5 +61,10 @@ class RunLongRunningTaskJob implements ShouldQueue
         $delay = $this->longRunningTaskLogItem->check_frequency_in_seconds;
 
         dispatch($job)->delay($delay);
+    }
+
+    public function uniqueId(): string
+    {
+        return $this->longRunningTaskLogItem->id;
     }
 }
