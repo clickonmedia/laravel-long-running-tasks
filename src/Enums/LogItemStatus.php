@@ -7,5 +7,6 @@ enum LogItemStatus: string
     case Pending = 'pending';
     case Running = 'running';
     case Failed = 'failed';
-    case DidNotCompleted = 'didNotComplete';
+    case Completed = 'completed';
+    case DidNotComplete = 'didNotComplete';
 }

@@ -6,6 +6,7 @@ use Clickonmedia\Monitor\Enums\LogItemCheckResult;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
+use Exception;
 
 abstract class LongRunningTask
 {
@@ -50,5 +51,5 @@ abstract class LongRunningTask
 
     abstract public function check(LongRunningTaskLogItem $logItem): LogItemCheckResult;
 
-    abstract public function onFail(LongRunningTaskLogItem $logItem);
+    abstract public function onFail(LongRunningTaskLogItem $logItem, Exception $exception): ?LogItemCheckResult;
 }
