@@ -2,9 +2,9 @@
 
 namespace Clickonmedia\Monitor\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\LongRunningTask;
+use Illuminate\Database\Eloquent\Model;
 
 class LongRunningTaskLogItem extends Model
 {
