@@ -8,6 +8,8 @@ use Clickonmedia\Monitor\LongRunningTask;
 
 class LongRunningTaskLogItem extends Model
 {
+    public $guarded = [];
+
     public $casts = [
         'status' => LogItemStatus::class,
         'meta' => 'array',

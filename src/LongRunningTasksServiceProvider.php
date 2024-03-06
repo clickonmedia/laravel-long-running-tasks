@@ -13,14 +13,7 @@ class LongRunningTasksServiceProvider extends PackageServiceProvider
         $package
             ->name('laravel-long-running-tasks-monitor')
             ->hasConfigFile()
-            ->hasMigration('create_long_running_tasks_table')
+            ->hasMigration('create_long_running_task_log_items_table')
             ->hasCommand(Monitor::class);
-
-        /*
-        LongRunningSomeServiceTask::make()
-            ->meta()
-            ->start();
-        */
-
     }
 }

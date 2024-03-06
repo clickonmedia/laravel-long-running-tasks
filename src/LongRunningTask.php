@@ -2,6 +2,7 @@
 
 namespace Clickonmedia\Monitor;
 
+use Clickonmedia\Monitor\Enums\LogItemCheckResult;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
@@ -47,7 +48,7 @@ abstract class LongRunningTask
         return 10;
     }
 
-    abstract public function check(LongRunningTaskLogItem $logItem);
+    abstract public function check(LongRunningTaskLogItem $logItem): LogItemCheckResult;
 
     abstract public function onFail(LongRunningTaskLogItem $logItem);
 }
