@@ -3,6 +3,7 @@
 namespace Clickonmedia\Monitor\Models;
 
 use Clickonmedia\Monitor\Enums\LogItemStatus;
+use Clickonmedia\Monitor\Exceptions\InvalidTask;
 use Clickonmedia\Monitor\LongRunningTask;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +16,8 @@ class LongRunningTaskLogItem extends Model
         'meta' => 'array',
         'last_check_started_at' => 'timestamp',
         'last_check_ended_at' => 'timestamp',
+        'stop_checking_at' => 'timestamp',
+        'exception' => 'array',
     ];
 
     public function task(): LongRunningTask
@@ -22,11 +25,11 @@ class LongRunningTaskLogItem extends Model
         $taskClass = $this->type;
 
         if (! class_exists($taskClass)) {
-            // TODO: throw exception
+            throw InvalidTask::classDoesNotExist($taskClass);
         }
 
         if (! is_a($taskClass, LongRunningTask::class)) {
-            // TODO: throw exception
+            throw InvalidTask::classIsNotATask($taskClass);
         }
 
         /** @var LongRunningTask $task */

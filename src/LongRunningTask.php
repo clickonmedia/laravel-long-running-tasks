@@ -2,6 +2,7 @@
 
 namespace Clickonmedia\Monitor;
 
+use Carbon\Carbon;
 use Clickonmedia\Monitor\Enums\LogItemCheckResult;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
@@ -32,6 +33,7 @@ abstract class LongRunningTask
             'type' => $this->type(),
             'check_frequency_in_seconds' => $this->checkFrequencyInSeconds(),
             'attempt' => 1,
+            'stop_checking_at' => $this->stopCheckingAt(),
         ]);
 
         dispatch(new RunLongRunningTaskJob($logItem));
@@ -47,6 +49,11 @@ abstract class LongRunningTask
     public function checkFrequencyInSeconds(): int
     {
         return 10;
+    }
+
+    public function stopCheckingAt(): Carbon
+    {
+        return now()->addHour();
     }
 
     abstract public function check(LongRunningTaskLogItem $logItem): LogItemCheckResult;

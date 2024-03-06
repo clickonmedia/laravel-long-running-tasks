@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('attempt')->default(1);
             $table->timestamp('last_check_started_at')->nullable();
             $table->timestamp('last_check_ended_at')->nullable();
+            $table->timestamp('stop_checking_at')->nullable();
+            $table->text('latest_exception')->nullable();
 
             $table->timestamps();
         });

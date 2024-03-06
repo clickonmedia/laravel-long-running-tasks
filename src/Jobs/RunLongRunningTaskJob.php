@@ -27,6 +27,13 @@ class RunLongRunningTaskJob implements ShouldQueue
             $checkResult = $task->onFail($this->longRunningTaskLogItem, $exception);
 
             $checkResult ??= LogItemCheckResult::StopChecking;
+
+            $this->longRunningTaskLogItem->update([
+                'exception' => [
+                    'message' => $exception->getMessage(),
+                    'trace' => $exception->getTraceAsString(),
+                ],
+            ]);
         }
 
         if ($checkResult === LogItemCheckResult::StopChecking) {
