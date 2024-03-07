@@ -30,7 +30,7 @@ class RunLongRunningTaskJob implements ShouldBeUnique, ShouldQueue
             $checkResult ??= LogItemCheckResult::StopChecking;
 
             $this->longRunningTaskLogItem->update([
-                'exception' => [
+                'latest_exception' => [
                     'message' => $exception->getMessage(),
                     'trace' => $exception->getTraceAsString(),
                 ],

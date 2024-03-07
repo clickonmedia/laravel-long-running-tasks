@@ -5,10 +5,13 @@ namespace Clickonmedia\Monitor\Models;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\Exceptions\InvalidTask;
 use Clickonmedia\Monitor\LongRunningTask;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class LongRunningTaskLogItem extends Model
 {
+    use HasFactory;
+
     public $guarded = [];
 
     public $casts = [
@@ -17,7 +20,7 @@ class LongRunningTaskLogItem extends Model
         'last_check_started_at' => 'timestamp',
         'last_check_ended_at' => 'timestamp',
         'stop_checking_at' => 'timestamp',
-        'exception' => 'array',
+        'latest_exception' => 'array',
         'run_count' => 'integer',
     ];
 
@@ -29,7 +32,7 @@ class LongRunningTaskLogItem extends Model
             throw InvalidTask::classDoesNotExist($taskClass);
         }
 
-        if (! is_a($taskClass, LongRunningTask::class)) {
+        if (! is_a($taskClass, LongRunningTask::class, true)) {
             throw InvalidTask::classIsNotATask($taskClass);
         }
 
@@ -46,7 +49,7 @@ class LongRunningTaskLogItem extends Model
         return $this;
     }
 
-    protected function markAsRunning(): self
+    public function markAsRunning(): self
     {
         $this->update([
             'last_check_started_at' => now(),

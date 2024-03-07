@@ -26,6 +26,6 @@ class LongRunningTestTask extends LongRunningTask
 
     public function onFail(LongRunningTaskLogItem $logItem, Exception $exception): LogItemCheckResult
     {
-
+        return LogItemCheckResult::StopChecking;
     }
 }
