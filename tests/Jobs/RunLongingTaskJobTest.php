@@ -7,7 +7,7 @@ use Clickonmedia\Monitor\Tests\TestSupport\LongRunningTasks\LongRunningTestTask;
 use Illuminate\Support\Facades\Queue;
 use Spatie\TestTime\TestTime;
 
-beforeEach(function() {
+beforeEach(function () {
     TestTime::freeze();
 
     $this->logItem = LongRunningTaskLogItem::factory()->create([
@@ -17,10 +17,10 @@ beforeEach(function() {
     ]);
 });
 
-it('can handle a pending task that will complete', function() {
+it('can handle a pending task that will complete', function () {
     Queue::fake();
 
-   (new RunLongRunningTaskJob($this->logItem))->handle();
+    (new RunLongRunningTaskJob($this->logItem))->handle();
 
     expect($this->logItem->refresh())
         ->status->toBe(LogItemStatus::Completed)
@@ -30,6 +30,6 @@ it('can handle a pending task that will complete', function() {
     Queue::assertNothingPushed();
 });
 
-it('can handle a pending task, that needs a couple of runs to complete', function() {
+it('can handle a pending task, that needs a couple of runs to complete', function () {
 
 });
