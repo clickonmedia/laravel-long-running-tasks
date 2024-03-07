@@ -4,7 +4,6 @@ use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 use Clickonmedia\Monitor\Tests\TestSupport\LongRunningTasks\LongRunningTestTask;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Queue;
 
 it('can create create a pending task', function () {
