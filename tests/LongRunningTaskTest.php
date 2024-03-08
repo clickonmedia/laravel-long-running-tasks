@@ -123,7 +123,7 @@ it('will stop a task that would run forever', function () {
         ->run_count->toBeGreaterThan(1);
 });
 
-it('can add meta data', function() {
+it('can add meta data', function () {
     $meta = ['foo' => 'bar'];
 
     LongRunningTestTask::make()->meta($meta)->start();
@@ -132,7 +132,7 @@ it('can add meta data', function() {
         ->meta->toBe($meta);
 });
 
-it('accepts meta data via the start method', function() {
+it('accepts meta data via the start method', function () {
     $meta = ['foo' => 'bar'];
 
     LongRunningTestTask::make()->start($meta);
