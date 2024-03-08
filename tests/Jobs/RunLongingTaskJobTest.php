@@ -1,7 +1,7 @@
 <?php
 
-use Clickonmedia\Monitor\Enums\TaskResult;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
+use Clickonmedia\Monitor\Enums\TaskResult;
 use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 use Clickonmedia\Monitor\Tests\TestSupport\LongRunningTasks\LongRunningTestTask;
@@ -34,7 +34,7 @@ it('can handle a pending task that will complete', function () {
 });
 
 it('can handle a pending task that needs a couple of runs to complete', function () {
-    LongRunningTestTask::$checkClosure = function(LongRunningTaskLogItem $logItem) {
+    LongRunningTestTask::$checkClosure = function (LongRunningTaskLogItem $logItem) {
         return $logItem->run_count < 5
             ? TaskResult::ContinueChecking
             : TaskResult::StopChecking;
@@ -49,8 +49,8 @@ it('can handle a pending task that needs a couple of runs to complete', function
         ->last_check_ended_at->not()->toBeNull();
 });
 
-it('will handle exceptions well', function() {
-    LongRunningTestTask::$checkClosure = function(LongRunningTaskLogItem $logItem) {
+it('will handle exceptions well', function () {
+    LongRunningTestTask::$checkClosure = function (LongRunningTaskLogItem $logItem) {
         throw new Exception();
     };
 
