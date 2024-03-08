@@ -100,3 +100,20 @@ it('can handle a task that will recover', function () {
         ->run_count->toBe(3)
         ->latest_exception->toBeNull();
 });
+
+it('will stop a task that would run forever', function() {
+    config()->set('long-running-tasks-monitor.keep_checking_for_in_seconds', 1);
+
+    $task = new class extends LongRunningTask {
+        public function check(LongRunningTaskLogItem $logItem): TaskResult
+        {
+            return TaskResult::ContinueChecking;
+        }
+    };
+
+    $task->start();
+
+    expect(LongRunningTaskLogItem::first())
+        ->status->toBe(LogitemStatus::DidNotComplete)
+        ->run_count->toBeGreaterThan(1);
+});
