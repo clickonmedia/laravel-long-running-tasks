@@ -3,8 +3,8 @@
 namespace Clickonmedia\Monitor;
 
 use Carbon\Carbon;
-use Clickonmedia\Monitor\Enums\TaskResult;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
+use Clickonmedia\Monitor\Enums\TaskResult;
 use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 use Exception;
@@ -12,6 +12,12 @@ use Exception;
 abstract class LongRunningTask
 {
     protected array $meta = [];
+
+    abstract public function check(LongRunningTaskLogItem $logItem): TaskResult;
+
+    public function onFail(LongRunningTaskLogItem $logItem, Exception $exception): ?TaskResult {
+        return TaskResult::StopChecking;
+    }
 
     public static function make()
     {
@@ -55,8 +61,4 @@ abstract class LongRunningTask
     {
         return now()->addSeconds(config('long-running-tasks-monitor.keep_checking_for_in_seconds'));
     }
-
-    abstract public function check(LongRunningTaskLogItem $logItem): TaskResult;
-
-    abstract public function onFail(LongRunningTaskLogItem $logItem, Exception $exception): ?TaskResult;
 }
