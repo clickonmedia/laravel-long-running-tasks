@@ -2,13 +2,12 @@
 
 namespace Clickonmedia\Monitor\Jobs;
 
-use Clickonmedia\Monitor\Enums\TaskResult;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
+use Clickonmedia\Monitor\Enums\TaskResult;
 use Clickonmedia\Monitor\LongRunningTask;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 use Exception;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,7 +16,6 @@ use Illuminate\Queue\SerializesModels;
 
 class RunLongRunningTaskJob implements ShouldBeUniqueUntilProcessing, ShouldQueue
 {
-
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public function __construct(protected LongRunningTaskLogItem $longRunningTaskLogItem)
@@ -50,7 +48,7 @@ class RunLongRunningTaskJob implements ShouldBeUniqueUntilProcessing, ShouldQueu
             return;
         }
 
-        if (!$this->longRunningTaskLogItem->shouldKeepChecking()) {
+        if (! $this->longRunningTaskLogItem->shouldKeepChecking()) {
             $this->longRunningTaskLogItem->markAsCheckedEnded(LogItemStatus::DidNotComplete);
 
             return;

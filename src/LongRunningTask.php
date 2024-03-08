@@ -15,7 +15,8 @@ abstract class LongRunningTask
 
     abstract public function check(LongRunningTaskLogItem $logItem): TaskResult;
 
-    public function onFail(LongRunningTaskLogItem $logItem, Exception $exception): ?TaskResult {
+    public function onFail(LongRunningTaskLogItem $logItem, Exception $exception): ?TaskResult
+    {
         return TaskResult::StopChecking;
     }
 

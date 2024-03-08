@@ -26,7 +26,8 @@ it('can create create a pending task', function () {
 });
 
 it('can handle a pending task that will complete', function () {
-    $task = new class extends LongRunningTask {
+    $task = new class extends LongRunningTask
+    {
         public function check(LongRunningTaskLogItem $logItem): TaskResult
         {
             return TaskResult::StopChecking;
@@ -42,7 +43,8 @@ it('can handle a pending task that will complete', function () {
 });
 
 it('can handle a pending task that needs a couple of runs to complete', function () {
-    $task = new class extends LongRunningTask {
+    $task = new class extends LongRunningTask
+    {
         public function check(LongRunningTaskLogItem $logItem): TaskResult
         {
             return $logItem->run_count < 5
@@ -61,7 +63,8 @@ it('can handle a pending task that needs a couple of runs to complete', function
 });
 
 it('will can handle a task that always fails', function () {
-    $task = new class extends LongRunningTask {
+    $task = new class extends LongRunningTask
+    {
         public function check(LongRunningTaskLogItem $logItem): TaskResult
         {
             throw new Exception();
@@ -77,7 +80,8 @@ it('will can handle a task that always fails', function () {
 });
 
 it('can handle a task that will recover', function () {
-    $task = new class extends LongRunningTask {
+    $task = new class extends LongRunningTask
+    {
         public function check(LongRunningTaskLogItem $logItem): TaskResult
         {
             if ($logItem->run_count < 3) {
