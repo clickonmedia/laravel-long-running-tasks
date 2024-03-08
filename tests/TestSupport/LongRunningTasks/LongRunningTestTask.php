@@ -2,7 +2,7 @@
 
 namespace Clickonmedia\Monitor\Tests\TestSupport\LongRunningTasks;
 
-use Clickonmedia\Monitor\Enums\LogItemCheckResult;
+use Clickonmedia\Monitor\Enums\TaskResult;
 use Clickonmedia\Monitor\LongRunningTask;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 use Closure;
@@ -10,22 +10,19 @@ use Exception;
 
 class LongRunningTestTask extends LongRunningTask
 {
-    public function __construct(protected ?Closure $callable = null)
-    {
+    public static ?Closure $checkClosure = null;
 
-    }
-
-    public function check(LongRunningTaskLogItem $logItem): LogItemCheckResult
+    public function check(LongRunningTaskLogItem $logItem): TaskResult
     {
-        if ($this->callable) {
-            return ($this->callable)($logItem);
+        if (self::$checkClosure) {
+            return (self::$checkClosure)($logItem);
         }
 
-        return LogItemCheckResult::StopChecking;
+        return TaskResult::StopChecking;
     }
 
-    public function onFail(LongRunningTaskLogItem $logItem, Exception $exception): LogItemCheckResult
+    public function onFail(LongRunningTaskLogItem $logItem, Exception $exception): TaskResult
     {
-        return LogItemCheckResult::StopChecking;
+        return TaskResult::StopChecking;
     }
 }

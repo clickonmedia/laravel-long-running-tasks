@@ -17,6 +17,7 @@ class LongRunningTaskLogItemFactory extends Factory
             'status' => LogItemStatus::Pending,
             'check_frequency_in_seconds' => 10,
             'meta' => [],
+            'stop_checking_at' => now()->addSeconds(config('long-running-tasks-monitor.keep_checking_for_in_seconds')),
         ];
     }
 }

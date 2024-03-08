@@ -1,5 +1,6 @@
 <?php
 
+use Clickonmedia\Monitor\Enums\TaskResult;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
@@ -8,7 +9,9 @@ use Illuminate\Support\Facades\Queue;
 use Spatie\TestTime\TestTime;
 
 beforeEach(function () {
-    TestTime::freeze();
+    LongRunningTestTask::$checkClosure = null;
+
+    TestTime::freeze('Y-m-d H:i:s', '2024-01-01 00:00:00');
 
     $this->logItem = LongRunningTaskLogItem::factory()->create([
         'status' => LogItemStatus::Pending,
@@ -30,6 +33,28 @@ it('can handle a pending task that will complete', function () {
     Queue::assertNothingPushed();
 });
 
-it('can handle a pending task, that needs a couple of runs to complete', function () {
+it('can handle a pending task that needs a couple of runs to complete', function () {
+    LongRunningTestTask::$checkClosure = function(LongRunningTaskLogItem $logItem) {
+        return $logItem->run_count < 5
+            ? TaskResult::ContinueChecking
+            : TaskResult::StopChecking;
+    };
 
+    (new RunLongRunningTaskJob($this->logItem))->handle();
+
+    expect($this->logItem->refresh())
+        ->run_count->toBe(5)
+        ->status->toBe(LogItemStatus::Completed)
+        ->last_check_started_at->not()->toBeNull()
+        ->last_check_ended_at->not()->toBeNull();
 });
+
+it('will handle exceptions well', function() {
+    LongRunningTestTask::$checkClosure = function(LongRunningTaskLogItem $logItem) {
+        throw new Exception();
+    };
+
+    (new RunLongRunningTaskJob($this->logItem))->handle();
+
+    dd($this->logItem->refresh());
+})->skip();

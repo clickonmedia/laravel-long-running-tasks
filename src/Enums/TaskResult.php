@@ -2,7 +2,7 @@
 
 namespace Clickonmedia\Monitor\Enums;
 
-enum LogItemCheckResult: string
+enum TaskResult: string
 {
     case ContinueChecking = 'continueChecking';
     case StopChecking = 'stopChecking';

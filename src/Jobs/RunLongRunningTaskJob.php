@@ -2,15 +2,23 @@
 
 namespace Clickonmedia\Monitor\Jobs;
 
-use Clickonmedia\Monitor\Enums\LogItemCheckResult;
+use Clickonmedia\Monitor\Enums\TaskResult;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 use Exception;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 
-class RunLongRunningTaskJob implements ShouldBeUnique, ShouldQueue
+class RunLongRunningTaskJob implements ShouldBeUniqueUntilProcessing, ShouldQueue
 {
+
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     public function __construct(protected LongRunningTaskLogItem $longRunningTaskLogItem)
     {
 
@@ -27,7 +35,7 @@ class RunLongRunningTaskJob implements ShouldBeUnique, ShouldQueue
         } catch (Exception $exception) {
             $checkResult = $task->onFail($this->longRunningTaskLogItem, $exception);
 
-            $checkResult ??= LogItemCheckResult::StopChecking;
+            $checkResult ??= TaskResult::StopChecking;
 
             $this->longRunningTaskLogItem->update([
                 'latest_exception' => [
@@ -37,7 +45,7 @@ class RunLongRunningTaskJob implements ShouldBeUnique, ShouldQueue
             ]);
         }
 
-        if ($checkResult === LogItemCheckResult::StopChecking) {
+        if ($checkResult === TaskResult::StopChecking) {
             $this->longRunningTaskLogItem->markAsCheckedEnded(LogItemStatus::Completed);
 
             return;

@@ -17,9 +17,9 @@ class LongRunningTaskLogItem extends Model
     public $casts = [
         'status' => LogItemStatus::class,
         'meta' => 'array',
-        'last_check_started_at' => 'timestamp',
-        'last_check_ended_at' => 'timestamp',
-        'stop_checking_at' => 'timestamp',
+        'last_check_started_at' => 'datetime',
+        'last_check_ended_at' => 'datetime',
+        'stop_checking_at' => 'datetime',
         'latest_exception' => 'array',
         'run_count' => 'integer',
     ];
@@ -40,7 +40,7 @@ class LongRunningTaskLogItem extends Model
         return new $taskClass;
     }
 
-    protected function markAsPending(): self
+    public function markAsPending(): self
     {
         $this->update([
             'status' => LogItemStatus::Pending,
@@ -72,6 +72,10 @@ class LongRunningTaskLogItem extends Model
 
     public function shouldKeepChecking(): bool
     {
+        if (is_null($this->stop_checking_at)) {
+            return true;
+        }
+
         return $this->stop_checking_at > now();
     }
 }
