@@ -121,3 +121,21 @@ it('will stop a task that would run forever', function() {
         ->status->toBe(LogitemStatus::DidNotComplete)
         ->run_count->toBeGreaterThan(1);
 });
+
+it('can add meta data', function() {
+    $meta = ['foo' => 'bar'];
+
+    LongRunningTestTask::make()->meta($meta)->start();
+
+    expect(LongRunningTaskLogItem::first())
+        ->meta->toBe($meta);
+});
+
+it('accepts meta data via the start method', function() {
+    $meta = ['foo' => 'bar'];
+
+    LongRunningTestTask::make()->start($meta);
+
+    expect(LongRunningTaskLogItem::first())
+        ->meta->toBe($meta);
+});

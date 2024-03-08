@@ -32,8 +32,12 @@ abstract class LongRunningTask
         return $this;
     }
 
-    public function start(): LongRunningTaskLogItem
+    public function start(?array $meta = null): LongRunningTaskLogItem
     {
+        if ($meta) {
+            $this->meta($meta);
+        }
+
         $logItem = LongRunningTaskLogItem::create([
             'status' => LogItemStatus::Pending,
             'meta' => $this->meta,
