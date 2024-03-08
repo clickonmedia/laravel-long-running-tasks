@@ -49,12 +49,15 @@ it('can handle a pending task that needs a couple of runs to complete', function
         ->last_check_ended_at->not()->toBeNull();
 });
 
-it('will handle exceptions well', function() {
+it('will can handle a failed task', function() {
     LongRunningTestTask::$checkClosure = function(LongRunningTaskLogItem $logItem) {
         throw new Exception();
     };
 
     (new RunLongRunningTaskJob($this->logItem))->handle();
 
-    dd($this->logItem->refresh());
-})->skip();
+    expect($this->logItem->refresh())
+        ->status->toBe(LogitemStatus::Failed)
+        ->run_count->toBe(1)
+        ->latest_exception->toHaveKeys(['message', 'trace']);
+});

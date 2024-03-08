@@ -55,6 +55,7 @@ class LongRunningTaskLogItem extends Model
             'last_check_started_at' => now(),
             'status' => LogItemStatus::Running,
             'run_count' => $this->run_count + 1,
+            'latest_exception' => null,
         ]);
 
         return $this;

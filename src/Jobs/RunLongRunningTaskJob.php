@@ -4,6 +4,7 @@ namespace Clickonmedia\Monitor\Jobs;
 
 use Clickonmedia\Monitor\Enums\TaskResult;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
+use Clickonmedia\Monitor\LongRunningTask;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -28,36 +29,54 @@ class RunLongRunningTaskJob implements ShouldBeUniqueUntilProcessing, ShouldQueu
     {
         $task = $this->longRunningTaskLogItem->task();
 
-        try {
-            $this->longRunningTaskLogItem->markAsRunning();
+        $this->longRunningTaskLogItem->markAsRunning();
 
+        try {
             $checkResult = $task->check($this->longRunningTaskLogItem);
         } catch (Exception $exception) {
-            $checkResult = $task->onFail($this->longRunningTaskLogItem, $exception);
+            $this->handleException($task, $exception);
 
-            $checkResult ??= TaskResult::StopChecking;
-
-            $this->longRunningTaskLogItem->update([
-                'latest_exception' => [
-                    'message' => $exception->getMessage(),
-                    'trace' => $exception->getTraceAsString(),
-                ],
-            ]);
+            return;
         }
 
+        $this->handleTaskResult($checkResult);
+    }
+
+    protected function handleTaskResult(TaskResult $checkResult): void
+    {
         if ($checkResult === TaskResult::StopChecking) {
             $this->longRunningTaskLogItem->markAsCheckedEnded(LogItemStatus::Completed);
 
             return;
         }
 
-        if (! $this->longRunningTaskLogItem->shouldKeepChecking()) {
+        if (!$this->longRunningTaskLogItem->shouldKeepChecking()) {
             $this->longRunningTaskLogItem->markAsCheckedEnded(LogItemStatus::DidNotComplete);
 
             return;
         }
 
         $this->dispatchAgain();
+    }
+
+    protected function handleException(LongRunningTask $task, Exception $exception): void
+    {
+        $checkResult = $task->onFail($this->longRunningTaskLogItem, $exception);
+
+        $checkResult ??= TaskResult::StopChecking;
+
+        $this->longRunningTaskLogItem->update([
+            'latest_exception' => [
+                'message' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString(),
+            ],
+        ]);
+
+        $this->longRunningTaskLogItem->markAsCheckedEnded(LogItemStatus::Failed);
+
+        if ($checkResult == TaskResult::ContinueChecking) {
+            $this->dispatchAgain();
+        }
     }
 
     protected function dispatchAgain(): void
