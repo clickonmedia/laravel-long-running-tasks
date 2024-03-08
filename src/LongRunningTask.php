@@ -52,14 +52,14 @@ abstract class LongRunningTask
         return $logItem;
     }
 
-    public function type(): string
+    protected function type(): string
     {
         return static::class;
     }
 
     public function checkFrequencyInSeconds(): int
     {
-        return 10;
+        return config('long-running-tasks-monitor.default_check_frequency_in_seconds');
     }
 
     public function stopCheckingAt(): Carbon
