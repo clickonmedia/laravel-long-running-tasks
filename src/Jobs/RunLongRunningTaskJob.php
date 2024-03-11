@@ -85,7 +85,11 @@ class RunLongRunningTaskJob implements ShouldBeUniqueUntilProcessing, ShouldQueu
 
         $delay = $this->longRunningTaskLogItem->check_frequency_in_seconds;
 
-        dispatch($job)->delay($delay);
+        $queue = config('long-running-tasks-monitor.queue');
+
+        dispatch($job)
+            ->onQueue($queue)
+            ->delay($delay);
     }
 
     public function uniqueId(): string

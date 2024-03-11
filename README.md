@@ -7,15 +7,16 @@
 
 Some services, like AWS Rekognition, allow you to start a task on their side. Instead of sending a webhook when the task is finished, the services expects you to regularly poll to know when it is finished (or get an updated status).
 
-This package can help you monitor such long running tasks that are executed externally.
+This package can help you monitor such long-running tasks that are executed externally.
 
 You do so by creating a task like this.
 
 ```php
 use Clickonmedia\Monitor\LongRunningTask;
 use Clickonmedia\Monitor\Enums\TaskResult;
+use Clickonmedia\Monitor\LongRunningTask;
 
-class MyTask extends \Clickonmedia\Monitor\LongRunningTask
+class MyTask extends LongRunningTask
 {
     public function check(LongRunningTaskLogItem $logItem): TaskResult
     {
@@ -41,6 +42,8 @@ After you have created your task, you can start it like this.
 ```php
 MyTask::make()->meta($anArray)->start();
 ```
+
+The `check` method of `MyTask` will be called every 10 seconds until it returns `StopChecking`
 
 ## Installation
 
@@ -68,16 +71,22 @@ This is the contents of the published config file:
 ```php
 return [
     /*
-     * When a task is not completed in this amount of time,
-     * it will not run again, and marked as `didNotComplete`.
+     * Behind the scenes, this packages use a queue to call tasks.
+     * Here you can choose the queue that should be used by default.
      */
-    'keep_checking_for_in_seconds' => 60 * 5,
+    'queue' => 'default',
 
     /*
      * If a task determines that it should be continued, it will
      * be called again after this amount of time
      */
     'default_check_frequency_in_seconds' => 10,
+
+    /*
+     * When a task is not completed in this amount of time,
+     * it will not run again, and marked as `didNotComplete`.
+     */
+    'keep_checking_for_in_seconds' => 60 * 5,
 
     /*
      * The model that will be used by default to track
@@ -92,12 +101,52 @@ return [
 ];
 ```
 
+This package make use of queues to call tasks again after a certain amount of time. Make sure you've set up [queues](https://laravel.com/docs/10.x/queues) in your Laravel app.
+
 ## Usage
 
+To monitor a long-running task on an external service, you should define a task class. It should extend the `Clickonmedia\Monitor\LongRunningTask` provided by the package.
+
+It's `check` function should perform the work you need it to do and return a `TaskResult`. When returning `TaskResult::StopChecking` the task will not be called again. When returning `TaskResult::ContinueChecking` it will be called again in 10 seconds by default.
+
 ```php
-$monitor = new Clickonmedia\Monitor();
-echo $monitor->echoPhrase('Hello, Clickonmedia!');
+use Clickonmedia\Monitor\LongRunningTask;
+use Clickonmedia\Monitor\Enums\TaskResult;
+use Clickonmedia\Monitor\LongRunningTask;
+
+class MyTask extends LongRunningTask
+{
+    public function check(LongRunningTaskLogItem $logItem): TaskResult
+    {
+        // get some information about this task
+        $meta = $logItem->meta
+    
+        // do some work here
+        $allWorkIsDone = /* ... */
+       
+        // return wheter we should continue the task in a new run
+        
+         return $allWorkIsDone
+            ? TaskResult::StopChecking
+            : TaskResult::ContinueChecking
+    }
+}
 ```
+
+### Adding meta data
+
+### Tracking the status of tasks
+
+### Using a different queue
+
+### Preventing never-ending tasks
+
+### Handling exceptions
+
+### Using your own model
+
+### Using your own job
+`
 
 ## Testing
 
