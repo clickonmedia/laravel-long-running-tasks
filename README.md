@@ -13,7 +13,7 @@ You do so by creating a task like this.
 
 ```php
 use Clickonmedia\Monitor\LongRunningTask;
-use \Clickonmedia\Monitor\Enums\TaskResult;
+use Clickonmedia\Monitor\Enums\TaskResult;
 
 class MyTask extends \Clickonmedia\Monitor\LongRunningTask
 {
@@ -90,12 +90,6 @@ return [
      */
     'task_job' => Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob::class,
 ];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-long-running-tasks-monitor-views"
 ```
 
 ## Usage
