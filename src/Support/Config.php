@@ -3,6 +3,7 @@
 namespace Clickonmedia\Monitor\Support;
 
 use Clickonmedia\Monitor\Exceptions\InvalidJob;
+use Clickonmedia\Monitor\Exceptions\InvalidModel;
 use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
 use \Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 
@@ -30,7 +31,7 @@ class Config
         $modelClass = config('long-running-tasks-monitor.log_model');
 
         if (! is_a($modelClass, LongRunningTaskLogItem::class, true)) {
-            throw InvalidJob::make($modelClass);
+            throw InvalidModel::make($modelClass);
         }
 
         return $modelClass;
