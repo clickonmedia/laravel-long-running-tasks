@@ -5,6 +5,8 @@ use Clickonmedia\Monitor\Jobs\LongRunningTaskJob;
 use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 use Clickonmedia\Monitor\Support\Config;
+use Clickonmedia\Monitor\Tests\TestSupport\LongRunningTasks\LongRunningTestTask;
+use Illuminate\Support\Facades\Queue;
 
 it('can handle a valid custom model', function () {
     $customModel = new class extends LongRunningTaskLogItem {
@@ -36,6 +38,20 @@ it('can handle a custom job class', function () {
     $jobClass = Config::getTaskJobClass();
 
     expect($jobClass)->toBe($customJob::class);
+});
 
+it('will use a custom job class', function() {
+    Queue::fake();
 
+    $logItem = LongRunningTaskLogItem::factory()->create();
+
+    $customJob = new class($logItem) extends RunLongRunningTaskJob {
+
+    };
+
+    config()->set('long-running-tasks-monitor.task_job', $customJob::class);
+
+    LongRunningTestTask::make()->start();
+
+    Queue::assertPushed($customJob::class);
 });
