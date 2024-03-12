@@ -21,7 +21,6 @@ return [
      */
     'keep_checking_for_in_seconds' => 60 * 5,
 
-
     // TODO: make this setting work
     /*
      * The model that will be used by default to track
