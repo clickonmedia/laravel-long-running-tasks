@@ -7,6 +7,7 @@ use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\Enums\TaskResult;
 use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
+use Clickonmedia\Monitor\Support\Config;
 use Exception;
 
 abstract class LongRunningTask
@@ -69,7 +70,9 @@ abstract class LongRunningTask
             'stop_checking_at' => $this->stopCheckingAt(),
         ]);
 
-        dispatch(new RunLongRunningTaskJob($logItem));
+        $jobClass = Config::getTaskJobClass();
+
+        dispatch(new $jobClass($logItem));
 
         return $logItem;
     }
