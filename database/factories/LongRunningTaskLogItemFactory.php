@@ -14,6 +14,7 @@ class LongRunningTaskLogItemFactory extends Factory
     {
         return [
             'type' => $this->faker->word,
+            'queue' => 'default',
             'status' => LogItemStatus::Pending,
             'check_frequency_in_seconds' => 10,
             'meta' => [],
