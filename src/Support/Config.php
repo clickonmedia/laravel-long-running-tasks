@@ -25,7 +25,7 @@ class Config
     /**
      * @return class-string<LongRunningTaskLogItem>
      */
-    public function getLongRunningTaskLogItemModelClass(): string
+    public static function getLongRunningTaskLogItemModelClass(): string
     {
         $modelClass = config('long-running-tasks-monitor.log_model');
 

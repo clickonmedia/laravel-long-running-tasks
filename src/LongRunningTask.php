@@ -59,7 +59,9 @@ abstract class LongRunningTask
             $this->meta($meta);
         }
 
-        $logItem = LongRunningTaskLogItem::create([
+        $logModel = Config::getLongRunningTaskLogItemModelClass();
+
+        $logItem = $logModel::create([
             'status' => LogItemStatus::Pending,
             'queue' => $this->getQueue(),
             'meta' => $this->meta,

@@ -7,6 +7,7 @@ use Clickonmedia\Monitor\LongRunningTask;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 use Clickonmedia\Monitor\Tests\TestSupport\LongRunningTasks\LongRunningTestTask;
 use Illuminate\Support\Facades\Queue;
+use Spatie\TestTime\TestTime;
 
 it('can create create a pending task', function () {
     Queue::fake();
@@ -193,9 +194,33 @@ it('can use a custom queue when starting a task', function () {
 });
 
 it('will respect the keep checking for setting on a task class', function () {
+    TestTime::freeze('Y-m-d H:i:s', '2024-01-01 00:00:00');
 
-})->todo();
+    Queue::fake();
+
+    $task = new class extends LongRunningTask
+    {
+        public int $keepCheckingForInSeconds = 25;
+
+        public function check(LongRunningTaskLogItem $logItem): TaskResult
+        {
+            return TaskResult::ContinueChecking;
+        }
+    };
+
+    $task->start();
+
+    $stopCheckingAt = LongRunningTaskLogItem::first()->stop_checking_at;
+
+    expect($stopCheckingAt->format('Y-m-d H:i:s'))->toBe('2024-01-01 00:00:25');
+});
 
 it('can use the keep checking for value when starting a task', function () {
+    TestTime::freeze('Y-m-d H:i:s', '2024-01-01 00:00:00');
 
-})->todo();
+    LongRunningTestTask::make()->keepCheckingForInSeconds(25)->start();
+
+    $stopCheckingAt = LongRunningTaskLogItem::first()->stop_checking_at;
+
+    expect($stopCheckingAt->format('Y-m-d H:i:s'))->toBe('2024-01-01 00:00:25');
+});
