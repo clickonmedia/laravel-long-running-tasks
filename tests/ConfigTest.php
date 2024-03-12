@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\Queue;
 use Clickonmedia\Monitor\LongRunningTask;
 
 it('can handle a valid custom model', function () {
-    $customModel = new class extends LongRunningTaskLogItem {
+    $customModel = new class extends LongRunningTaskLogItem
+    {
         protected $table = 'long_running_task_log_items';
     };
 
@@ -59,8 +60,8 @@ it('can use a custom model', function() {
 it('can handle a custom job class', function () {
     $logItem = LongRunningTaskLogItem::factory()->create();
 
-    $customJob = new class($logItem) extends RunLongRunningTaskJob {
-
+    $customJob = new class($logItem) extends RunLongRunningTaskJob
+    {
     };
 
     config()->set('long-running-tasks-monitor.task_job', $customJob::class);
@@ -70,13 +71,13 @@ it('can handle a custom job class', function () {
     expect($jobClass)->toBe($customJob::class);
 });
 
-it('will use a custom job class', function() {
+it('will use a custom job class', function () {
     Queue::fake();
 
     $logItem = LongRunningTaskLogItem::factory()->create();
 
-    $customJob = new class($logItem) extends RunLongRunningTaskJob {
-
+    $customJob = new class($logItem) extends RunLongRunningTaskJob
+    {
     };
 
     config()->set('long-running-tasks-monitor.task_job', $customJob::class);
