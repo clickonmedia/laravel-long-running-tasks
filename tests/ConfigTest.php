@@ -35,7 +35,6 @@ it('can use a custom model', function() {
 
     config()->set('long-running-tasks-monitor.log_model', $customModel::class);
 
-
     $task = new class() extends LongRunningTask
     {
         public static string $customModel;
