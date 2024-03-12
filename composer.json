@@ -70,10 +70,7 @@
         "laravel": {
             "providers": [
               "LongRunningTasksServiceProvider"
-            ],
-            "aliases": {
-                "Monitor": "Clickonmedia\\Monitor\\Facades\\Monitor"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",

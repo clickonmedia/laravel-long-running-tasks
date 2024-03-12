@@ -35,7 +35,7 @@ class MyTask extends LongRunningTask
 }
 ```
 
-When `TaskResult::ContinueChecking` is return, this `check` function will be called again in 10 seconds (as defined in the `default_check_frequency_in_seconds` of the config file).
+When `TaskResult::ContinueChecking` is returned, this `check` function will be called again in 10 seconds (as defined in the `default_check_frequency_in_seconds` of the config file).
 
 After you have created your task, you can start it like this.
 
@@ -43,7 +43,7 @@ After you have created your task, you can start it like this.
 MyTask::make()->meta($anArray)->start();
 ```
 
-The `check` method of `MyTask` will be called every 10 seconds until it returns `StopChecking`
+The `check` method of `MyTask` will be called every 10 seconds until it returns `TaskResult::StopChecking`
 
 ## Installation
 
@@ -112,14 +112,13 @@ It's `check` function should perform the work you need it to do and return a `Ta
 ```php
 use Clickonmedia\Monitor\LongRunningTask;
 use Clickonmedia\Monitor\Enums\TaskResult;
-use Clickonmedia\Monitor\LongRunningTask;
 
 class MyTask extends LongRunningTask
 {
     public function check(LongRunningTaskLogItem $logItem): TaskResult
     {
         // get some information about this task
-        $meta = $logItem->meta
+        $meta = $logItem->meta // returns an array
     
         // do some work here
         $allWorkIsDone = /* ... */
@@ -133,15 +132,161 @@ class MyTask extends LongRunningTask
 }
 ```
 
+To start the task above, you can call the `start` method.
+
+```php
+MyTask::make()->start();
+```
+
+This will create a record in the `long_running_task_log_items` table that tracks the progress of this task. The `check` method of `MyTask` will be called every 10 seconds until it returns `TaskResult::StopChecking`.
+
 ### Adding meta data
 
-### Tracking the status of tasks
+In most cases, you'll want to give a task some specific data it can act upon. This can be done by passing an array to the `meta` method.
+
+```php
+MyTask::make()->meta($arrayWithMetaData)->start();
+```
+
+Alternatively, you could also pass it to the `start` method.
+
+```php
+MyTask::make()->start($arrayWithMetaData);
+```
+
+The given array will be available on the `LongRunningTaskLogItem` instance that is passed to the `check` method of your task.
+
+```php
+class MyTask extends LongRunningTask
+{
+    public function check(LongRunningTaskLogItem $logItem): TaskResult
+    {
+        // get some information about this task
+        $meta = $logItem->meta // returns an array
+
+        // rest of method
+    }
+}
+```
+
+### Customizing the check interval
+
+By default, when the `check` method of your task returns `TaskResult::ContinueChecking`, it will be called again in 10 seconds. You can customize that timespan by changing the value of the `default_check_frequency_in_seconds` key in the `long-running-tasks-monitor` config file.
+
+You can also specify a check interval on your task itself.
+
+```php
+class MyTask extends LongRunningTask
+{
+    public int $checkFrequencyInSeconds = 20;
+}
+```
+
+To specify a checking interval on a specific instance of a task, you can use the `checkInterval` method.
+
+```php
+MyTask::make()
+   ->checkFrequencyInSeconds(30)
+   ->start();
+```
 
 ### Using a different queue
 
+This package uses queues to call tasks again after a certain amount of time. By default, it will use the `default` queue. You can customize the queue that should be used by changing the value of the `queue` key in the `long-running-tasks-monitor` config file.
+
+You can also specify a queue on your task itself.
+
+```php
+class MyTask extends LongRunningTask
+{
+    public string $queue = 'my-custom-queue';
+}
+```
+
+To specify a queue on a specific instance of a task, you can use the `onQueue` method.
+
+```php
+MyTask::make()
+   ->queue('my-custom-queue')
+   ->start();
+```
+
+### Tracking the status of tasks
+
+For each task that is started, a record will be created in the `long_running_task_log_items` table. This record will track the status of the task.
+
+The `LongRunningTaskLogItem` model has a `status` attribute that can have the following values:
+
+- `pending`: The task has not been started yet.
+- `running`: The task is currently running.
+- `completed`: The task has completed.
+- `failed`: The task has failed. Probably an unhanded exception was thrown.
+- `didNotComplete`: The task did not complete in the given amount of time.
+
+The table also contains these properties:
+
+- `task`: The fully qualified class name of the task.
+- `queue`: The queue the task is running on.
+- `check_frequency_in_seconds`: The amount of time in seconds that should pass before the task is checked again.
+- `meta`: An array of meta data that was passed to the task.
+- `last_check_started_at`: The date and time the task was started.
+- `last_check_ended_at`: The date and time the task was ended.
+- `stop_checking_at`: The date and time the task should stop being checked.
+- `lastest_exception`: An array with keys `message` and `trace` that contains the latest exception that was thrown.
+- `run_count`: The amount of times the task has been run.
+- `attempt`: The amount of times the task has been attempted after a failure occurred.
+- `created_at`: The date and time the record was created.
+
 ### Preventing never-ending tasks
 
+The package has a way of preventing task to run indefinitely.
+
+When a task is not completed in the amount of time specified in the `keep_checking_for_in_seconds` key of the `long-running-tasks-monitor` config file, it will not run again, and marked as `didNotComplete`. 
+
+You can customize that timespan on a specific task.
+
+```php
+class MyTask extends LongRunningTask
+{
+    public int $keepCheckingForInSeconds = 60 * 10;
+}
+```
+
+You can also specify the timespan on a specific instance of a task.
+
+```php
+MyTask::make()
+   ->keepCheckingForInSeconds(60 * 10)
+   ->start();
+```
+
 ### Handling exceptions
+
+When an exception is thrown in the `check` method of your task, it will be caught and stored in the `latest_exception` attribute of the `LongRunningTaskLogItem` model.
+
+Optionally, you can define an `onFailure` method on your task. This method will be called when an exception is thrown in the `check` method.
+
+```php
+use Clickonmedia\Monitor\LongRunningTask;
+use Clickonmedia\Monitor\Enums\TaskResult;
+
+class MyTask extends LongRunningTask
+{
+    public function check(LongRunningTaskLogItem $logItem): TaskResult
+    {
+        throw new Exception('Something went wrong');
+    }
+
+    public function onFail(LongRunningTaskLogItem $logItem, Exception $exception): ?TaskResult
+    {
+        // handle the exception
+    }
+}
+```
+
+You can let the `onFail` method return a `TaskResult`. When it returns `TaskResult::ContinueChecking`, the task will be called again. If it doesn't return anything, the task will not be called again.
+
+### Events
 
 ### Using your own model
 

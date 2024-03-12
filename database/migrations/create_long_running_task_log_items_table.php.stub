@@ -13,6 +13,7 @@ return new class extends Migration
 
             $table->string('type');
             $table->string('status');
+            $table->string('queue');
             $table->integer('check_frequency_in_seconds');
             $table->json('meta');
             $table->timestamp('last_check_started_at')->nullable();

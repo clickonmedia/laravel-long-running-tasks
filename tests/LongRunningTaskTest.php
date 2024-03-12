@@ -140,3 +140,64 @@ it('accepts meta data via the start method', function () {
     expect(LongRunningTaskLogItem::first())
         ->meta->toBe($meta);
 });
+
+it('will respect the custom check frequency on a task class', function() {
+    Queue::fake();
+
+    $task = new class extends LongRunningTask
+    {
+        public int $checkFrequencyInSeconds = 100;
+
+        public function check(LongRunningTaskLogItem $logItem): TaskResult
+        {
+            return TaskResult::ContinueChecking;
+        }
+    };
+
+    $task->start();
+
+    expect(LongRunningTaskLogItem::first())
+        ->check_frequency_in_seconds->toBe(100);
+});
+
+it('can use a custom check frequency when starting a task', function() {
+    LongRunningTestTask::make()->checkFrequencyInSeconds(100)->start();
+
+    expect(LongRunningTaskLogItem::first())
+        ->check_frequency_in_seconds->toBe(100);
+});
+
+it('will respect the custom queue on a task class', function() {
+    Queue::fake();
+
+    $task = new class extends LongRunningTask
+    {
+        public string $queue = 'custom-queue';
+
+        public function check(LongRunningTaskLogItem $logItem): TaskResult
+        {
+            return TaskResult::ContinueChecking;
+        }
+    };
+
+    $task->start();
+
+    expect(LongRunningTaskLogItem::first())->queue->toBe('custom-queue');
+});
+
+it('can use a custom queue when starting a task', function() {
+    LongRunningTestTask::make()->queue('custom-queue')->start();
+
+    expect(LongRunningTaskLogItem::first())
+        ->queue->toBe('custom-queue');
+});
+
+
+it('will respect the keep checking for setting on a task class', function() {
+
+})->todo();
+
+
+it('can use the keep checking for value when starting a task', function() {
+
+})->todo();

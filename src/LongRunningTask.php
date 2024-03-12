@@ -32,6 +32,27 @@ abstract class LongRunningTask
         return $this;
     }
 
+    public function queue(string $queue): self
+    {
+        $this->queue = $queue;
+
+        return $this;
+    }
+
+    public function checkFrequencyInSeconds(int $seconds): self
+    {
+        $this->checkFrequencyInSeconds = $seconds;
+
+        return $this;
+    }
+
+    public function keepCheckingForInSeconds(int $seconds)
+    {
+        $this->keepCheckingForInSeconds = $seconds;
+
+        return $this;
+    }
+
     public function start(?array $meta = null): LongRunningTaskLogItem
     {
         if ($meta) {
@@ -40,9 +61,10 @@ abstract class LongRunningTask
 
         $logItem = LongRunningTaskLogItem::create([
             'status' => LogItemStatus::Pending,
+            'queue' => $this->getQueue(),
             'meta' => $this->meta,
             'type' => $this->type(),
-            'check_frequency_in_seconds' => $this->checkFrequencyInSeconds(),
+            'check_frequency_in_seconds' => $this->getCheckFrequencyInSeconds(),
             'attempt' => 1,
             'stop_checking_at' => $this->stopCheckingAt(),
         ]);
@@ -57,13 +79,32 @@ abstract class LongRunningTask
         return static::class;
     }
 
-    public function checkFrequencyInSeconds(): int
+    protected function getCheckFrequencyInSeconds(): int
     {
+        if (isset($this->checkFrequencyInSeconds)) {
+            return $this->checkFrequencyInSeconds;
+        }
+
         return config('long-running-tasks-monitor.default_check_frequency_in_seconds');
+    }
+
+    public function getQueue(): string
+    {
+        if (isset($this->queue)) {
+            return $this->queue;
+        }
+
+        return config('long-running-tasks-monitor.queue');
     }
 
     public function stopCheckingAt(): Carbon
     {
-        return now()->addSeconds(config('long-running-tasks-monitor.keep_checking_for_in_seconds'));
+        $timespan = config('long-running-tasks-monitor.keep_checking_for_in_seconds');
+
+        if (isset($this->keepCheckingForInSeconds)) {
+            $timespan = $this->keepCheckingForInSeconds;
+        }
+
+        return now()->addSeconds($timespan);
     }
 }
