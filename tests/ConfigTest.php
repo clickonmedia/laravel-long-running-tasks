@@ -34,23 +34,27 @@ it('can use a custom model', function() {
 
     config()->set('long-running-tasks-monitor.log_model', $customModel::class);
 
-    $task = new class($customModel) extends LongRunningTask
-    {
-        public function __construct(protected string $customModel)
-        {
 
-        }
+    $task = new class() extends LongRunningTask
+    {
+        public static string $customModel;
 
         public function check(LongRunningTaskLogItem $logItem): TaskResult
         {
-            if (! $logItem instanceof $this->customModel) {
+            if (! $logItem instanceof self::$customModel) {
                 throw new Exception('Not the right class');
             }
+
+            return TaskResult::StopChecking;
         }
     };
 
+    $task::$customModel = $customModel::class;
+
     $task->start();
-})->todo();
+
+    expect(LongRunningTaskLogItem::first()->latest_exception)->toBeNull();
+});
 
 it('can handle a custom job class', function () {
     $logItem = LongRunningTaskLogItem::factory()->create();
