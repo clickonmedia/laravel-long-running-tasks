@@ -4,7 +4,6 @@ namespace Clickonmedia\Monitor\Support;
 
 use Clickonmedia\Monitor\Exceptions\InvalidJob;
 use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
-use Clickonmedia\Monitor\LongRunningTask;
 
 class Config
 {

@@ -5,7 +5,6 @@ namespace Clickonmedia\Monitor;
 use Carbon\Carbon;
 use Clickonmedia\Monitor\Enums\LogItemStatus;
 use Clickonmedia\Monitor\Enums\TaskResult;
-use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
 use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
 use Clickonmedia\Monitor\Support\Config;
 use Exception;
