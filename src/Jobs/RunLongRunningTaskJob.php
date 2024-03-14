@@ -4,6 +4,11 @@ namespace Clickonmedia\LongRunningTasks\Jobs;
 
 use Clickonmedia\LongRunningTasks\Enums\LogItemStatus;
 use Clickonmedia\LongRunningTasks\Enums\TaskResult;
+use Clickonmedia\LongRunningTasks\Events\DispatchingNewRunEvent;
+use Clickonmedia\LongRunningTasks\Events\TaskCompletedEvent;
+use Clickonmedia\LongRunningTasks\Events\TaskDidNotCompleteEvent;
+use Clickonmedia\LongRunningTasks\Events\TaskRunEndedEvent;
+use Clickonmedia\LongRunningTasks\Events\TaskRunStartingEvent;
 use Clickonmedia\LongRunningTasks\LongRunningTask;
 use Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem;
 use Exception;
@@ -30,7 +35,11 @@ class RunLongRunningTaskJob implements ShouldBeUniqueUntilProcessing, ShouldQueu
         $this->longRunningTaskLogItem->markAsRunning();
 
         try {
+            event(new TaskRunStartingEvent($this->longRunningTaskLogItem));
+
             $checkResult = $task->check($this->longRunningTaskLogItem);
+
+            event(new TaskRunEndedEvent($this->longRunningTaskLogItem));
         } catch (Exception $exception) {
             $this->handleException($task, $exception);
 
@@ -45,11 +54,15 @@ class RunLongRunningTaskJob implements ShouldBeUniqueUntilProcessing, ShouldQueu
         if ($checkResult === TaskResult::StopChecking) {
             $this->longRunningTaskLogItem->markAsCheckedEnded(LogItemStatus::Completed);
 
+            event(new TaskCompletedEvent($this->longRunningTaskLogItem));
+
             return;
         }
 
         if (! $this->longRunningTaskLogItem->shouldKeepChecking()) {
             $this->longRunningTaskLogItem->markAsCheckedEnded(LogItemStatus::DidNotComplete);
+
+            event(new TaskDidNotCompleteEvent($this->longRunningTaskLogItem));
 
             return;
         }
@@ -80,6 +93,8 @@ class RunLongRunningTaskJob implements ShouldBeUniqueUntilProcessing, ShouldQueu
     protected function dispatchAgain(): void
     {
         $this->longRunningTaskLogItem->markAsPending();
+
+        event(new DispatchingNewRunEvent($this->longRunningTaskLogItem));
 
         $job = new static($this->longRunningTaskLogItem);
 

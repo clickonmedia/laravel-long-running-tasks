@@ -364,7 +364,36 @@ return [
     'task_job' => App\Jobs\RunLongRunningTaskJob::class,
 ];
 ```
-`
+
+### Events
+
+The package fires events that you can listen to in your application to perform additional actions when certain events occur.
+
+All of these events have a property `$longRunningTaskLogItem` that contains a `LongRunningTaskLogItem` model.
+
+#### `Clickonmedia\LongRunningTasks\Events\TaskRunStarting`
+
+This event will be fired when a task is about to be run.
+
+#### `Clickonmedia\LongRunningTasks\Events\TaskRunEnded`
+
+This event will be fired when a task has ended.
+
+#### `Clickonmedia\LongRunningTasks\Events\TaskCompleted`
+
+This event will be fired when a task has completed.
+
+#### `Clickonmedia\LongRunningTasks\Events\TaskRunFailed`
+
+This event will be fired when a task has failed.
+
+#### `Clickonmedia\LongRunningTasks\Events\TaskRunDidNotComplete`
+
+This event will be fired when a task did not complete in the given amount of time.
+
+#### `Clickonmedia\LongRunningTasks\Events\DispatchingNewRunEvent`
+
+This event will be fired when a new run of a task is about to be dispatched.
 
 ## Testing
 
