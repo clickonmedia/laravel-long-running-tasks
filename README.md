@@ -339,6 +339,31 @@ class LongRunningTaskLogItem extends BaseLongRunningTaskLogItem
 ```
 
 ### Using your own job
+
+By default, the package uses the `RunLongRunningTaskJob` job to call tasks. If you want to use your own job, you can create a job that extends the `RunLongRunningTaskJob` job provided by this package.
+
+```php
+namespace App\Jobs;
+
+use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob as BaseRunLongRunningTaskJob;
+
+class RunLongRunningTaskJob extends BaseRunLongRunningTaskJob
+{
+    // your custom functionality
+}
+```
+
+You should then update the `task_job` key in the `long-running-tasks-monitor` config file to point to your custom job.
+
+```php
+// in config/long-running-tasks-monitor.php
+
+return [
+    // ...
+
+    'task_job' => App\Jobs\RunLongRunningTaskJob::class,
+];
+```
 `
 
 ## Testing
