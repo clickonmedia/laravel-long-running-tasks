@@ -290,6 +290,54 @@ You can let the `onFail` method return a `TaskResult`. When it returns `TaskResu
 
 ### Using your own model
 
+If you need extra fields or functionality on the `LongRunningTaskLogItem` model, you can create your own model that extends the `LongRunningTaskLogItem` model provided by this package.
+
+```php
+namespace App\Models;
+
+use Clickonmedia\Monitor\Models\LongRunningTaskLogItem as BaseLongRunningTaskLogItem;
+
+class LongRunningTaskLogItem extends BaseLongRunningTaskLogItem
+{
+    // your custom functionality
+}
+```
+
+You should then update the `log_model` key in the `long-running-tasks-monitor` config file to point to your custom model.
+
+```php
+// in config/long-running-tasks-monitor.php
+
+return [
+    // ...
+
+    'log_model' => App\Models\LongRunningTaskLogItem::class,
+];
+```
+
+To fill the extra custom fields of your model, you could use the `creating` and `updating` events. You could use the `meta` property to pass data to the model.
+
+```php
+namespace App\Models;
+
+use Clickonmedia\Monitor\Models\LongRunningTaskLogItem as BaseLongRunningTaskLogItem;
+
+class LongRunningTaskLogItem extends BaseLongRunningTaskLogItem
+{
+    protected static function booted()
+    {
+        static::creating(function ($logItem) {
+            $customValue = $logItem->meta['some_key'];
+            
+            // optionally, you could unset the custom value from the meta array
+            unset($logItem->meta['some_key']);
+        
+            $logItem->custom_field = $customValue;
+        });
+    }
+}
+```
+
 ### Using your own job
 `
 
