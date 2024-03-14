@@ -1,6 +1,6 @@
 <?php
 
-namespace Clickonmedia\Monitor\Enums;
+namespace Clickonmedia\LongRunningTasks\Enums;
 
 enum TaskResult: string
 {

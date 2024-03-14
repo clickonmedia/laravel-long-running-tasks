@@ -1,8 +1,8 @@
 <?php
 
-namespace Clickonmedia\Monitor\Tests;
+namespace Clickonmedia\LongRunningTasks\Tests;
 
-use Clickonmedia\Monitor\LongRunningTasksServiceProvider;
+use Clickonmedia\LongRunningTasks\LongRunningTasksServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
 
@@ -13,7 +13,7 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Clickonmedia\\Monitor\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Clickonmedia\\LongRunningTasks\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 

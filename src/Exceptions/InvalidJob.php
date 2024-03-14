@@ -1,8 +1,8 @@
 <?php
 
-namespace Clickonmedia\Monitor\Exceptions;
+namespace Clickonmedia\LongRunningTasks\Exceptions;
 
-use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
+use Clickonmedia\LongRunningTasks\Jobs\RunLongRunningTaskJob;
 use Exception;
 
 class InvalidJob extends Exception

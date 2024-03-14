@@ -1,11 +1,11 @@
 <?php
 
-namespace Clickonmedia\Monitor\Support;
+namespace Clickonmedia\LongRunningTasks\Support;
 
-use Clickonmedia\Monitor\Exceptions\InvalidJob;
-use Clickonmedia\Monitor\Exceptions\InvalidModel;
-use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
-use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
+use Clickonmedia\LongRunningTasks\Exceptions\InvalidJob;
+use Clickonmedia\LongRunningTasks\Exceptions\InvalidModel;
+use Clickonmedia\LongRunningTasks\Jobs\RunLongRunningTaskJob;
+use Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem;
 
 class Config
 {
@@ -14,7 +14,7 @@ class Config
      */
     public static function getTaskJobClass(): string
     {
-        $jobClass = config('long-running-tasks-monitor.task_job');
+        $jobClass = config('long-running-tasks.task_job');
 
         if (! is_a($jobClass, RunLongRunningTaskJob::class, true)) {
             throw InvalidJob::make($jobClass);
@@ -28,7 +28,7 @@ class Config
      */
     public static function getLongRunningTaskLogItemModelClass(): string
     {
-        $modelClass = config('long-running-tasks-monitor.log_model');
+        $modelClass = config('long-running-tasks.log_model');
 
         if (! is_a($modelClass, LongRunningTaskLogItem::class, true)) {
             throw InvalidModel::make($modelClass);

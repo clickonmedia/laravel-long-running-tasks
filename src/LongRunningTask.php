@@ -1,12 +1,12 @@
 <?php
 
-namespace Clickonmedia\Monitor;
+namespace Clickonmedia\LongRunningTasks;
 
 use Carbon\Carbon;
-use Clickonmedia\Monitor\Enums\LogItemStatus;
-use Clickonmedia\Monitor\Enums\TaskResult;
-use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
-use Clickonmedia\Monitor\Support\Config;
+use Clickonmedia\LongRunningTasks\Enums\LogItemStatus;
+use Clickonmedia\LongRunningTasks\Enums\TaskResult;
+use Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem;
+use Clickonmedia\LongRunningTasks\Support\Config;
 use Exception;
 
 abstract class LongRunningTask
@@ -89,7 +89,7 @@ abstract class LongRunningTask
             return $this->checkFrequencyInSeconds;
         }
 
-        return config('long-running-tasks-monitor.default_check_frequency_in_seconds');
+        return config('long-running-tasks.default_check_frequency_in_seconds');
     }
 
     public function getQueue(): string
@@ -98,12 +98,12 @@ abstract class LongRunningTask
             return $this->queue;
         }
 
-        return config('long-running-tasks-monitor.queue');
+        return config('long-running-tasks.queue');
     }
 
     public function stopCheckingAt(): Carbon
     {
-        $timespan = config('long-running-tasks-monitor.keep_checking_for_in_seconds');
+        $timespan = config('long-running-tasks.keep_checking_for_in_seconds');
 
         if (isset($this->keepCheckingForInSeconds)) {
             $timespan = $this->keepCheckingForInSeconds;

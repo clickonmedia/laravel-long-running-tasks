@@ -1,6 +1,6 @@
 <?php
 
-use Clickonmedia\Monitor\Tests\TestCase;
+use Clickonmedia\LongRunningTasks\Tests\TestCase;
 
 uses(TestCase::class)
     ->beforeEach(fn () => ray()->newScreen($this->name()))

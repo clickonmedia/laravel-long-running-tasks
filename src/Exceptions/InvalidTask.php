@@ -1,8 +1,8 @@
 <?php
 
-namespace Clickonmedia\Monitor\Exceptions;
+namespace Clickonmedia\LongRunningTasks\Exceptions;
 
-use Clickonmedia\Monitor\LongRunningTask;
+use Clickonmedia\LongRunningTasks\LongRunningTask;
 use Exception;
 
 class InvalidTask extends Exception

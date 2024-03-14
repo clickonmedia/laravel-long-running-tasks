@@ -1,9 +1,9 @@
 # Monitor long running tasks in a Laravel app
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/clickonmedia/laravel-long-running-tasks-monitor.svg?style=flat-square)](https://packagist.org/packages/clickonmedia/laravel-long-running-tasks-monitor)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/clickonmedia/laravel-long-running-tasks-monitor/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/clickonmedia/laravel-long-running-tasks-monitor/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/clickonmedia/laravel-long-running-tasks-monitor/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/clickonmedia/laravel-long-running-tasks-monitor/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/clickonmedia/laravel-long-running-tasks-monitor.svg?style=flat-square)](https://packagist.org/packages/clickonmedia/laravel-long-running-tasks-monitor)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/clickonmedia/laravel-long-running-tasks.svg?style=flat-square)](https://packagist.org/packages/clickonmedia/laravel-long-running-tasks)
+[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/clickonmedia/laravel-long-running-tasks/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/clickonmedia/laravel-long-running-tasks/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/clickonmedia/laravel-long-running-tasks/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/clickonmedia/laravel-long-running-tasks/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/clickonmedia/laravel-long-running-tasks.svg?style=flat-square)](https://packagist.org/packages/clickonmedia/laravel-long-running-tasks)
 
 Some services, like AWS Rekognition, allow you to start a task on their side. Instead of sending a webhook when the task is finished, the services expects you to regularly poll to know when it is finished (or get an updated status).
 
@@ -12,9 +12,9 @@ This package can help you monitor such long-running tasks that are executed exte
 You do so by creating a task like this.
 
 ```php
-use Clickonmedia\Monitor\LongRunningTask;
-use Clickonmedia\Monitor\Enums\TaskResult;
-use Clickonmedia\Monitor\LongRunningTask;
+use Clickonmedia\LongRunningTasks\LongRunningTask;
+use Clickonmedia\LongRunningTasks\Enums\TaskResult;
+use Clickonmedia\LongRunningTasks\LongRunningTask;
 
 class MyTask extends LongRunningTask
 {
@@ -50,20 +50,20 @@ The `check` method of `MyTask` will be called every 10 seconds until it returns 
 You can install the package via composer:
 
 ```bash
-composer require clickonmedia/laravel-long-running-tasks-monitor
+composer require clickonmedia/laravel-long-running-tasks
 ```
 
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-long-running-tasks-monitor-migrations"
+php artisan vendor:publish --tag="laravel-long-running-tasks-migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="laravel-long-running-tasks-monitor-config"
+php artisan vendor:publish --tag="laravel-long-running-tasks-config"
 ```
 
 This is the contents of the published config file:
@@ -92,12 +92,12 @@ return [
      * The model that will be used by default to track
      * the status of all tasks.
      */
-    'log_model' => Clickonmedia\Monitor\Models\LongRunningTaskLogItem::class,
+    'log_model' => Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem::class,
 
     /*
      * The job responsible for calling tasks.
      */
-    'task_job' => Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob::class,
+    'task_job' => Clickonmedia\LongRunningTasks\Jobs\RunLongRunningTaskJob::class,
 ];
 ```
 
@@ -105,13 +105,13 @@ This package make use of queues to call tasks again after a certain amount of ti
 
 ## Usage
 
-To monitor a long-running task on an external service, you should define a task class. It should extend the `Clickonmedia\Monitor\LongRunningTask` provided by the package.
+To monitor a long-running task on an external service, you should define a task class. It should extend the `Clickonmedia\LongRunningTasks\LongRunningTask` provided by the package.
 
 It's `check` function should perform the work you need it to do and return a `TaskResult`. When returning `TaskResult::StopChecking` the task will not be called again. When returning `TaskResult::ContinueChecking` it will be called again in 10 seconds by default.
 
 ```php
-use Clickonmedia\Monitor\LongRunningTask;
-use Clickonmedia\Monitor\Enums\TaskResult;
+use Clickonmedia\LongRunningTasks\LongRunningTask;
+use Clickonmedia\LongRunningTasks\Enums\TaskResult;
 
 class MyTask extends LongRunningTask
 {
@@ -171,7 +171,7 @@ class MyTask extends LongRunningTask
 
 ### Customizing the check interval
 
-By default, when the `check` method of your task returns `TaskResult::ContinueChecking`, it will be called again in 10 seconds. You can customize that timespan by changing the value of the `default_check_frequency_in_seconds` key in the `long-running-tasks-monitor` config file.
+By default, when the `check` method of your task returns `TaskResult::ContinueChecking`, it will be called again in 10 seconds. You can customize that timespan by changing the value of the `default_check_frequency_in_seconds` key in the `long-running-tasks` config file.
 
 You can also specify a check interval on your task itself.
 
@@ -192,7 +192,7 @@ MyTask::make()
 
 ### Using a different queue
 
-This package uses queues to call tasks again after a certain amount of time. By default, it will use the `default` queue. You can customize the queue that should be used by changing the value of the `queue` key in the `long-running-tasks-monitor` config file.
+This package uses queues to call tasks again after a certain amount of time. By default, it will use the `default` queue. You can customize the queue that should be used by changing the value of the `queue` key in the `long-running-tasks` config file.
 
 You can also specify a queue on your task itself.
 
@@ -241,7 +241,7 @@ The table also contains these properties:
 
 The package has a way of preventing task to run indefinitely.
 
-When a task is not completed in the amount of time specified in the `keep_checking_for_in_seconds` key of the `long-running-tasks-monitor` config file, it will not run again, and marked as `didNotComplete`. 
+When a task is not completed in the amount of time specified in the `keep_checking_for_in_seconds` key of the `long-running-tasks` config file, it will not run again, and marked as `didNotComplete`. 
 
 You can customize that timespan on a specific task.
 
@@ -267,8 +267,8 @@ When an exception is thrown in the `check` method of your task, it will be caugh
 Optionally, you can define an `onFailure` method on your task. This method will be called when an exception is thrown in the `check` method.
 
 ```php
-use Clickonmedia\Monitor\LongRunningTask;
-use Clickonmedia\Monitor\Enums\TaskResult;
+use Clickonmedia\LongRunningTasks\LongRunningTask;
+use Clickonmedia\LongRunningTasks\Enums\TaskResult;
 
 class MyTask extends LongRunningTask
 {
@@ -295,7 +295,7 @@ If you need extra fields or functionality on the `LongRunningTaskLogItem` model,
 ```php
 namespace App\Models;
 
-use Clickonmedia\Monitor\Models\LongRunningTaskLogItem as BaseLongRunningTaskLogItem;
+use Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem as BaseLongRunningTaskLogItem;
 
 class LongRunningTaskLogItem extends BaseLongRunningTaskLogItem
 {
@@ -303,10 +303,10 @@ class LongRunningTaskLogItem extends BaseLongRunningTaskLogItem
 }
 ```
 
-You should then update the `log_model` key in the `long-running-tasks-monitor` config file to point to your custom model.
+You should then update the `log_model` key in the `long-running-tasks` config file to point to your custom model.
 
 ```php
-// in config/long-running-tasks-monitor.php
+// in config/long-running-tasks.php
 
 return [
     // ...
@@ -320,7 +320,7 @@ To fill the extra custom fields of your model, you could use the `creating` and 
 ```php
 namespace App\Models;
 
-use Clickonmedia\Monitor\Models\LongRunningTaskLogItem as BaseLongRunningTaskLogItem;
+use Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem as BaseLongRunningTaskLogItem;
 
 class LongRunningTaskLogItem extends BaseLongRunningTaskLogItem
 {
@@ -345,7 +345,7 @@ By default, the package uses the `RunLongRunningTaskJob` job to call tasks. If y
 ```php
 namespace App\Jobs;
 
-use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob as BaseRunLongRunningTaskJob;
+use Clickonmedia\LongRunningTasks\Jobs\RunLongRunningTaskJob as BaseRunLongRunningTaskJob;
 
 class RunLongRunningTaskJob extends BaseRunLongRunningTaskJob
 {
@@ -353,10 +353,10 @@ class RunLongRunningTaskJob extends BaseRunLongRunningTaskJob
 }
 ```
 
-You should then update the `task_job` key in the `long-running-tasks-monitor` config file to point to your custom job.
+You should then update the `task_job` key in the `long-running-tasks` config file to point to your custom job.
 
 ```php
-// in config/long-running-tasks-monitor.php
+// in config/long-running-tasks.php
 
 return [
     // ...

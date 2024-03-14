@@ -1,8 +1,8 @@
 <?php
 
-namespace Clickonmedia\Monitor\Exceptions;
+namespace Clickonmedia\LongRunningTasks\Exceptions;
 
-use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
+use Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem;
 use Exception;
 
 class InvalidModel extends Exception

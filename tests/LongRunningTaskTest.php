@@ -1,11 +1,11 @@
 <?php
 
-use Clickonmedia\Monitor\Enums\LogItemStatus;
-use Clickonmedia\Monitor\Enums\TaskResult;
-use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
-use Clickonmedia\Monitor\LongRunningTask;
-use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
-use Clickonmedia\Monitor\Tests\TestSupport\LongRunningTasks\LongRunningTestTask;
+use Clickonmedia\LongRunningTasks\Enums\LogItemStatus;
+use Clickonmedia\LongRunningTasks\Enums\TaskResult;
+use Clickonmedia\LongRunningTasks\Jobs\RunLongRunningTaskJob;
+use Clickonmedia\LongRunningTasks\LongRunningTask;
+use Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem;
+use Clickonmedia\LongRunningTasks\Tests\TestSupport\LongRunningTasks\LongRunningTestTask;
 use Illuminate\Support\Facades\Queue;
 use Spatie\TestTime\TestTime;
 
@@ -107,7 +107,7 @@ it('can handle a task that will recover', function () {
 });
 
 it('will stop a task that would run forever', function () {
-    config()->set('long-running-tasks-monitor.keep_checking_for_in_seconds', 1);
+    config()->set('long-running-tasks.keep_checking_for_in_seconds', 1);
 
     $task = new class extends LongRunningTask
     {

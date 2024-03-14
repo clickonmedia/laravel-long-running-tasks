@@ -1,6 +1,6 @@
 <?php
 
-namespace Clickonmedia\Monitor\Commands;
+namespace Clickonmedia\LongRunningTasks\Commands;
 
 use Illuminate\Console\Command;
 

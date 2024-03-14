@@ -1,11 +1,11 @@
 <?php
 
-namespace Clickonmedia\Monitor\Jobs;
+namespace Clickonmedia\LongRunningTasks\Jobs;
 
-use Clickonmedia\Monitor\Enums\LogItemStatus;
-use Clickonmedia\Monitor\Enums\TaskResult;
-use Clickonmedia\Monitor\LongRunningTask;
-use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
+use Clickonmedia\LongRunningTasks\Enums\LogItemStatus;
+use Clickonmedia\LongRunningTasks\Enums\TaskResult;
+use Clickonmedia\LongRunningTasks\LongRunningTask;
+use Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUniqueUntilProcessing;

@@ -23,10 +23,10 @@ return [
      * The model that will be used by default to track
      * the status of all tasks.
      */
-    'log_model' => Clickonmedia\Monitor\Models\LongRunningTaskLogItem::class,
+    'log_model' => Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem::class,
 
     /*
      * The job responsible for calling tasks.
      */
-    'task_job' => Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob::class,
+    'task_job' => Clickonmedia\LongRunningTasks\Jobs\RunLongRunningTaskJob::class,
 ];

@@ -1,12 +1,12 @@
 <?php
 
-use Clickonmedia\Monitor\Enums\TaskResult;
-use Clickonmedia\Monitor\Exceptions\InvalidModel;
-use Clickonmedia\Monitor\Jobs\RunLongRunningTaskJob;
-use Clickonmedia\Monitor\LongRunningTask;
-use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
-use Clickonmedia\Monitor\Support\Config;
-use Clickonmedia\Monitor\Tests\TestSupport\LongRunningTasks\LongRunningTestTask;
+use Clickonmedia\LongRunningTasks\Enums\TaskResult;
+use Clickonmedia\LongRunningTasks\Exceptions\InvalidModel;
+use Clickonmedia\LongRunningTasks\Jobs\RunLongRunningTaskJob;
+use Clickonmedia\LongRunningTasks\LongRunningTask;
+use Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem;
+use Clickonmedia\LongRunningTasks\Support\Config;
+use Clickonmedia\LongRunningTasks\Tests\TestSupport\LongRunningTasks\LongRunningTestTask;
 use Illuminate\Support\Facades\Queue;
 
 it('can handle a valid custom model', function () {
@@ -15,7 +15,7 @@ it('can handle a valid custom model', function () {
         protected $table = 'long_running_task_log_items';
     };
 
-    config()->set('long-running-tasks-monitor.log_model', $customModel::class);
+    config()->set('long-running-tasks.log_model', $customModel::class);
 
     $modelClass = Config::getLongRunningTaskLogItemModelClass();
 
@@ -23,7 +23,7 @@ it('can handle a valid custom model', function () {
 });
 
 it('will throw an exception for an invalid model', function () {
-    config()->set('long-running-tasks-monitor.log_model', Config::class);
+    config()->set('long-running-tasks.log_model', Config::class);
 
     Config::getLongRunningTaskLogItemModelClass();
 })->throws(InvalidModel::class);
@@ -34,7 +34,7 @@ it('can use a custom model', function () {
         protected $table = 'long_running_task_log_items';
     };
 
-    config()->set('long-running-tasks-monitor.log_model', $customModel::class);
+    config()->set('long-running-tasks.log_model', $customModel::class);
 
     $task = new class() extends LongRunningTask
     {
@@ -64,7 +64,7 @@ it('can handle a custom job class', function () {
     {
     };
 
-    config()->set('long-running-tasks-monitor.task_job', $customJob::class);
+    config()->set('long-running-tasks.task_job', $customJob::class);
 
     $jobClass = Config::getTaskJobClass();
 
@@ -80,7 +80,7 @@ it('will use a custom job class', function () {
     {
     };
 
-    config()->set('long-running-tasks-monitor.task_job', $customJob::class);
+    config()->set('long-running-tasks.task_job', $customJob::class);
 
     LongRunningTestTask::make()->start();
 

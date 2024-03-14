@@ -1,10 +1,10 @@
 <?php
 
-namespace Clickonmedia\Monitor\Models;
+namespace Clickonmedia\LongRunningTasks\Models;
 
-use Clickonmedia\Monitor\Enums\LogItemStatus;
-use Clickonmedia\Monitor\Exceptions\InvalidTask;
-use Clickonmedia\Monitor\LongRunningTask;
+use Clickonmedia\LongRunningTasks\Enums\LogItemStatus;
+use Clickonmedia\LongRunningTasks\Exceptions\InvalidTask;
+use Clickonmedia\LongRunningTasks\LongRunningTask;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Clickonmedia\Monitor\Tests\TestSupport\LongRunningTasks;
+namespace Clickonmedia\LongRunningTasks\Tests\TestSupport\LongRunningTasks;
 
-use Clickonmedia\Monitor\Enums\TaskResult;
-use Clickonmedia\Monitor\LongRunningTask;
-use Clickonmedia\Monitor\Models\LongRunningTaskLogItem;
+use Clickonmedia\LongRunningTasks\Enums\TaskResult;
+use Clickonmedia\LongRunningTasks\LongRunningTask;
+use Clickonmedia\LongRunningTasks\Models\LongRunningTaskLogItem;
 
 class LongRunningTestTask extends LongRunningTask
 {

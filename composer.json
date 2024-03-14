@@ -1,11 +1,11 @@
 {
-    "name": "clickonmedia/laravel-long-running-tasks-monitor",
+    "name": "clickonmedia/laravel-long-running-tasks",
     "description": "Monitor long running tasks in a Laravel app",
     "keywords": [
         "laravel",
-        "laravel-long-running-tasks-monitor"
+        "laravel-long-running-tasks"
     ],
-    "homepage": "https://github.com/spatie/laravel-long-running-tasks-monitor",
+    "homepage": "https://github.com/spatie/laravel-long-running-tasks",
     "license": "MIT",
     "authors": [
         {
@@ -31,19 +31,19 @@
     },
     "autoload": {
         "psr-4": {
-            "Clickonmedia\\Monitor\\": "src/",
-            "Clickonmedia\\Monitor\\Database\\Factories\\": "database/factories/"
+            "Clickonmedia\\LongRunningTasks\\": "src/",
+            "Clickonmedia\\LongRunningTasks\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Clickonmedia\\Monitor\\Tests\\": "tests/",
+            "Clickonmedia\\LongRunningTasks\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
     "scripts": {
         "post-autoload-dump": "@composer run prepare",
-        "clear": "@php vendor/bin/testbench package:purge-laravel-long-running-tasks-monitor --ansi",
+        "clear": "@php vendor/bin/testbench package:purge-laravel-long-running-tasks --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
         "build": [
             "@composer run prepare",
