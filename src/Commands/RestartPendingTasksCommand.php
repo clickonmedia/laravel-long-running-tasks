@@ -19,7 +19,7 @@ class RestartPendingTasksCommand extends Command
 
         $logItems::query()
             ->where('status', LogItemStatus::Pending)
-            ->each(function(LongRunningTaskLogItem $logItem) {
+            ->each(function (LongRunningTaskLogItem $logItem) {
                 $this->comment("Dispatching job for log item {$logItem->id}...");
 
                 $logItem->dispatchJob();
