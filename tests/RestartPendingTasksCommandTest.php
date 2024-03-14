@@ -14,6 +14,6 @@ it('can restart pending tasks', function () {
 
     Queue::assertPushed(
         RunLongRunningTaskJob::class,
-        fn($job) => $job->longRunningTaskLogItem->id === $logItem->id
+        fn ($job) => $job->longRunningTaskLogItem->id === $logItem->id
     );
 });
