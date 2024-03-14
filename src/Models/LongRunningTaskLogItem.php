@@ -5,6 +5,7 @@ namespace Clickonmedia\LongRunningTasks\Models;
 use Clickonmedia\LongRunningTasks\Enums\LogItemStatus;
 use Clickonmedia\LongRunningTasks\Exceptions\InvalidTask;
 use Clickonmedia\LongRunningTasks\LongRunningTask;
+use Clickonmedia\LongRunningTasks\Support\Config;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -78,5 +79,12 @@ class LongRunningTaskLogItem extends Model
         }
 
         return $this->stop_checking_at > now();
+    }
+
+    public function dispatchJob(): void
+    {
+        $jobClass = Config::getTaskJobClass();
+
+        dispatch(new $jobClass($this));
     }
 }

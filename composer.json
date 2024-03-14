@@ -1,6 +1,6 @@
 {
     "name": "clickonmedia/laravel-long-running-tasks",
-    "description": "Monitor long running tasks in a Laravel app",
+    "description": "Handle long running tasks in a Laravel app",
     "keywords": [
         "laravel",
         "laravel-long-running-tasks"

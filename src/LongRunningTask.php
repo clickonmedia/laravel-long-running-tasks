@@ -61,6 +61,7 @@ abstract class LongRunningTask
 
         $logModel = Config::getLongRunningTaskLogItemModelClass();
 
+        /** @var LongRunningTaskLogItem $logItem */
         $logItem = $logModel::create([
             'status' => LogItemStatus::Pending,
             'queue' => $this->getQueue(),
@@ -71,9 +72,7 @@ abstract class LongRunningTask
             'stop_checking_at' => $this->stopCheckingAt(),
         ]);
 
-        $jobClass = Config::getTaskJobClass();
-
-        dispatch(new $jobClass($logItem));
+        $logItem->dispatchJob();
 
         return $logItem;
     }
